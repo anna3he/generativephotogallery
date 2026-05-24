@@ -103,7 +103,7 @@ export default function DialKnob({
       onTouchMove={handleTouchMove}
       onFocus={onFocus}
       className="flex flex-col items-center cursor-ns-resize outline-none select-none"
-      style={{ gap: 'var(--s2)' }}
+      style={{ gap: 'var(--s3)' }}
       role="slider"
       aria-valuenow={value}
       aria-valuemin={min}
@@ -151,8 +151,8 @@ export default function DialKnob({
             fontSize: 'var(--type-label-size)',
             lineHeight: 'var(--type-label-lh)',
             letterSpacing: '-0.01em',
-            fontWeight: nightMode ? 500 : 400,
-            color: nightMode ? '#CCCCCC' : '#333',
+            fontWeight: 400,
+            color: nightMode ? '#CCCCCC' : '#444444',
           }}
         >
           {Number.isInteger(step) ? Math.round(value) : value.toFixed(1)}

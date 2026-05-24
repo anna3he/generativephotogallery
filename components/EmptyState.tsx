@@ -49,8 +49,8 @@ export default function EmptyState({ nightMode, onUpload }: Props) {
         <p
           className="type-body"
           style={{
-            color: c.t3,
-            fontWeight: nightMode ? 500 : 400,
+            color: c.t4,
+            fontWeight: 400,
           }}
         >
           Drop photos or press Space

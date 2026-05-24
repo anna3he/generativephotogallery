@@ -131,68 +131,37 @@ export function drawShapePreview(
       break
     }
     case 'cube': {
-      // Draw a 3D cube wireframe with dots at vertices
-      const size = 12
+      // Isometric cube — 3 filled faces
+      const s = 10
+      const cos30 = Math.cos(Math.PI / 6)
+      const sin30 = Math.sin(Math.PI / 6)
 
-      // 8 vertices of a cube centered at origin
-      const vertices = [
-        { x: -1, y: -1, z: -1 },
-        { x:  1, y: -1, z: -1 },
-        { x:  1, y:  1, z: -1 },
-        { x: -1, y:  1, z: -1 },
-        { x: -1, y: -1, z:  1 },
-        { x:  1, y: -1, z:  1 },
-        { x:  1, y:  1, z:  1 },
-        { x: -1, y:  1, z:  1 },
-      ]
+      // 7 visible isometric vertices
+      const top    = { x: cx,              y: cy - s }
+      const tRight = { x: cx + s * cos30,  y: cy - s * sin30 }
+      const tLeft  = { x: cx - s * cos30,  y: cy - s * sin30 }
+      const mid    = { x: cx,              y: cy }
+      const bRight = { x: cx + s * cos30,  y: cy + s * sin30 }
+      const bLeft  = { x: cx - s * cos30,  y: cy + s * sin30 }
+      const bot    = { x: cx,              y: cy + s }
 
-      // Simple rotation for visual interest
-      const rotY = 0.5
-      const rotX = 0.3
+      const fill = (pts: { x: number; y: number }[], alpha: number) => {
+        ctx.beginPath()
+        ctx.moveTo(pts[0].x, pts[0].y)
+        pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y))
+        ctx.closePath()
+        ctx.fillStyle = dotColor
+        ctx.globalAlpha = alpha
+        ctx.fill()
+      }
 
-      const projected = vertices.map(v => {
-        // Rotate Y
-        const x1 = v.x * Math.cos(rotY) - v.z * Math.sin(rotY)
-        const z1 = v.x * Math.sin(rotY) + v.z * Math.cos(rotY)
-        // Rotate X
-        const y2 = v.y * Math.cos(rotX) - z1 * Math.sin(rotX)
-        const z2 = v.y * Math.sin(rotX) + z1 * Math.cos(rotX)
-        return {
-          x: cx + x1 * size,
-          y: cy + y2 * size,
-          z: z2,
-        }
-      })
+      const topAlpha   = active ? 0.95 : 0.80
+      const leftAlpha  = active ? 0.60 : 0.48
+      const rightAlpha = active ? 0.35 : 0.28
 
-      // Draw edges
-      const edges = [
-        [0,1],[1,2],[2,3],[3,0],  // front face
-        [4,5],[5,6],[6,7],[7,4],  // back face
-        [0,4],[1,5],[2,6],[3,7],  // connecting edges
-      ]
-
-      ctx.beginPath()
-      edges.forEach(([a, b]) => {
-        ctx.moveTo(projected[a].x, projected[a].y)
-        ctx.lineTo(projected[b].x, projected[b].y)
-      })
-      ctx.strokeStyle = dotColor
-      ctx.globalAlpha = 0.3
-      ctx.lineWidth = 0.5
-      ctx.stroke()
-
-      // Draw dots at vertices
-      projected
-        .sort((a, b) => a.z - b.z)
-        .forEach(p => {
-          const alpha = 0.4 + (p.z + 1) * 0.3
-          const radius = 1.2 + (p.z + 1) * 0.5
-          ctx.beginPath()
-          ctx.arc(p.x, p.y, radius, 0, Math.PI * 2)
-          ctx.fillStyle = dotColor
-          ctx.globalAlpha = alpha
-          ctx.fill()
-        })
+      fill([top, tRight, mid, tLeft], topAlpha)
+      fill([tLeft, mid, bot, bLeft], leftAlpha)
+      fill([tRight, bRight, bot, mid], rightAlpha)
       break
     }
   }
