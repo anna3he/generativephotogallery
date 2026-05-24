@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { getColors } from '@/lib/tokens'
 
 interface Props {
   open: boolean
@@ -23,10 +24,8 @@ export default function PhotoManageModal({
 
   if (!open) return null
 
-  const bg = nightMode ? 'rgba(10,10,10,0.95)' : 'rgba(255,254,250,0.97)'
-  const border = nightMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
-  const textColor = nightMode ? '#e0e0e0' : '#1a1a1a'
-  const mutedColor = nightMode ? '#666' : '#999'
+  const c  = getColors(nightMode)
+  const bg = nightMode ? 'rgba(17,17,17,0.98)' : 'rgba(249,249,249,0.97)'
 
   const toggleSelect = (index: number) => {
     setSelected(prev => {
@@ -72,41 +71,53 @@ export default function PhotoManageModal({
         className="relative w-full max-w-md mx-4 rounded-2xl overflow-hidden"
         style={{
           background: bg,
-          border: `1px solid ${border}`,
-          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          border: `1px solid ${c.line}`,
+          boxShadow: nightMode ? 'none' : '0 16px 48px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06)',
         }}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between px-5 py-4"
-          style={{ borderBottom: `1px solid ${border}` }}
+          className="flex items-center justify-between"
+          style={{
+            padding: 'var(--s4) var(--s6)',
+            borderBottom: `1px solid ${c.line}`,
+          }}
         >
-          <h2 className="text-sm font-medium" style={{ color: textColor }}>
-            Manage Photos ({images.length})
+          <h2
+            className="type-h3"
+            style={{
+              color: c.t1,
+              fontWeight: nightMode ? 500 : 500,
+            }}
+          >
+            Manage Photos
+            <span className="type-body" style={{ color: c.t3, marginLeft: 'var(--s2)', fontWeight: 400 }}>
+              {images.length}
+            </span>
           </h2>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+            className="rounded-lg flex items-center justify-center transition-colors"
             style={{
-              background: nightMode ? '#2a2a2a' : '#eee',
-              color: nightMode ? '#888' : '#666',
+              width: 28,
+              height: 28,
+              background: nightMode ? c.bg3 : c.bg3,
+              color: c.t3,
             }}
           >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
+            <span className="material-symbols-outlined" style={{ fontSize: 12 }}>close</span>
           </button>
         </div>
 
         {/* Photo grid */}
-        <div className="p-4 max-h-[300px] overflow-y-auto">
+        <div className="max-h-[300px] overflow-y-auto" style={{ padding: 'var(--s4)' }}>
           {images.length === 0 ? (
-            <p className="text-center py-8 text-sm" style={{ color: mutedColor }}>
+            <p className="type-body text-center" style={{ padding: 'var(--s8) 0', color: c.t3 }}>
               No photos uploaded
             </p>
           ) : (
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5" style={{ gap: 'var(--s2)' }}>
               {images.map((img, i) => (
                 <button
                   key={i}
@@ -127,9 +138,7 @@ export default function PhotoManageModal({
                   />
                   {selected.has(i) && (
                     <div className="absolute inset-0 bg-red-500/30 flex items-center justify-center">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M4 4l8 8M12 4l-8 8" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
+                      <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'white' }}>close</span>
                     </div>
                   )}
                 </button>
@@ -140,34 +149,44 @@ export default function PhotoManageModal({
 
         {/* Footer */}
         <div
-          className="flex items-center justify-between px-5 py-4"
-          style={{ borderTop: `1px solid ${border}` }}
+          className="flex items-center justify-between"
+          style={{
+            padding: 'var(--s3) var(--s6)',
+            borderTop: `1px solid ${c.line}`,
+          }}
         >
           <button
             onClick={handleReset}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+            className="type-caption rounded-lg transition-colors"
             style={{
-              background: nightMode ? '#2a2a2a' : '#eee',
-              color: nightMode ? '#888' : '#666',
+              padding: 'var(--s2) var(--s3)',
+              background: nightMode ? c.bg3 : '#eee',
+              color: c.t3,
+              fontWeight: nightMode ? 500 : 400,
             }}
           >
             Reset All
           </button>
 
-          <div className="flex gap-2">
+          <div className="flex items-center" style={{ gap: 'var(--s2)' }}>
             {selected.size > 0 && (
-              <span className="text-xs self-center mr-2" style={{ color: mutedColor }}>
+              <span
+                className="type-caption"
+                style={{ color: c.t3, fontWeight: nightMode ? 500 : 400 }}
+              >
                 {selected.size} selected
               </span>
             )}
             <button
               onClick={handleDeleteSelected}
               disabled={selected.size === 0}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+              className="type-caption rounded-lg transition-all"
               style={{
-                background: selected.size > 0 ? '#ef4444' : nightMode ? '#2a2a2a' : '#eee',
-                color: selected.size > 0 ? '#fff' : nightMode ? '#555' : '#bbb',
+                padding: 'var(--s2) var(--s3)',
+                background: selected.size > 0 ? '#ef4444' : nightMode ? c.bg3 : '#eee',
+                color: selected.size > 0 ? '#fff' : c.t4,
                 cursor: selected.size > 0 ? 'pointer' : 'not-allowed',
+                fontWeight: nightMode ? 500 : 400,
               }}
             >
               Delete Selected

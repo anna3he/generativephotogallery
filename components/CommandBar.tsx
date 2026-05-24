@@ -4,6 +4,7 @@ import { useRef, useCallback } from 'react'
 import ShapePreviewCanvas from './ShapePreviewCanvas'
 import DialKnob from './DialKnob'
 import type { ShapeType } from '@/lib/layouts'
+import { getColors } from '@/lib/tokens'
 
 export interface DialParams {
   count: number
@@ -66,17 +67,17 @@ export default function CommandBar({
     [onUpload]
   )
 
-  const bg      = nightMode ? 'rgba(20,20,20,0.95)'    : 'rgba(255,254,250,0.97)'
-  const border  = nightMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'
-  const btnBg   = nightMode ? '#2a2a2a'                : '#eeecea'
-  const btnFg   = nightMode ? '#ccc'                   : '#444'
-  const mutedFg = nightMode ? '#555'                   : '#bbb'
+  const c     = getColors(nightMode)
+  const bg    = nightMode ? 'rgba(37,37,37,0.97)'   : 'rgba(249,249,249,0.97)'
+  const btnBg = nightMode ? c.bg3                  : c.bg3
+  const btnFg = nightMode ? c.t2                   : c.t2
 
   return (
     <>
       <div
-        className="fixed bottom-6 left-1/2 z-50"
+        className="fixed left-1/2 z-50"
         style={{
+          bottom: 'var(--s6)',
           transform: `translateX(-50%) translateY(${open ? '0' : '12px'})`,
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'all' : 'none',
@@ -85,18 +86,20 @@ export default function CommandBar({
         }}
       >
         <div
-          className="flex items-end gap-5 px-5 py-4 rounded-2xl"
+          className="flex items-center rounded-2xl"
           style={{
+            gap: 'var(--s8)',
+            padding: 'var(--s4) var(--s8)',
             background: bg,
-            border: `1px solid ${border}`,
-            boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08)',
+            border: `1px solid ${c.line}`,
+            boxShadow: nightMode ? 'none' : '0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
           }}
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Shapes */}
-          <div className="flex items-end gap-2">
+          <div className="flex items-center" style={{ gap: 'var(--s3)' }}>
             {SHAPES.map((s) => (
               <ShapePreviewCanvas
                 key={s.id}
@@ -109,10 +112,10 @@ export default function CommandBar({
             ))}
           </div>
 
-          <div className="self-stretch w-px mx-1" style={{ background: border }} />
+          <div className="self-stretch w-px" style={{ background: c.line }} />
 
           {/* Dials */}
-          <div className="flex items-end gap-4">
+          <div className="flex items-end" style={{ gap: 'var(--s4)' }}>
             {DIALS.map((d) => (
               <DialKnob
                 key={d.key}
@@ -129,97 +132,65 @@ export default function CommandBar({
             ))}
           </div>
 
-          <div className="self-stretch w-px mx-1" style={{ background: border }} />
+          <div className="self-stretch w-px" style={{ background: c.line }} />
 
           {/* Actions */}
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2">
+          <div className="flex flex-col items-center" style={{ gap: 'var(--s2)' }}>
+            <div className="flex" style={{ gap: 'var(--s2)' }}>
               {/* Upload */}
               <button
                 onClick={() => fileRef.current?.click()}
                 title="Upload photos"
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 2v8M5 5l3-3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M3 11v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
+                <span className="material-symbols-outlined">upload</span>
               </button>
 
-              {/* Night mode — clean crescent moon, no cutoff */}
+              {/* Dark / light mode */}
               <button
                 onClick={onNightModeToggle}
                 title={nightMode ? 'Light mode' : 'Night mode'}
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                {nightMode ? (
-                  // Sun icon for light mode
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-                    <circle cx="12" cy="12" r="4"/>
-                    <line x1="12" y1="2"  x2="12" y2="5"/>
-                    <line x1="12" y1="19" x2="12" y2="22"/>
-                    <line x1="2"  y1="12" x2="5"  y2="12"/>
-                    <line x1="19" y1="12" x2="22" y2="12"/>
-                    <line x1="4.22"  y1="4.22"  x2="6.34"  y2="6.34"/>
-                    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-                    <line x1="4.22"  y1="19.78" x2="6.34"  y2="17.66"/>
-                    <line x1="17.66" y1="6.34"  x2="19.78" y2="4.22"/>
-                  </svg>
-                ) : (
-                  // Crescent moon — drawn as a circle minus a smaller offset circle, clean
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8A9.014 9.014 0 0 0 12 3z"/>
-                  </svg>
-                )}
+                <span className="material-symbols-outlined">
+                  {nightMode ? 'light_mode' : 'dark_mode'}
+                </span>
               </button>
 
               {/* Export */}
               <button
                 onClick={onExport}
                 title="Export PNG"
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 10V2M5 7l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M3 11v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
+                <span className="material-symbols-outlined">download</span>
               </button>
             </div>
 
-            {/* Photos label + reset */}
-            <div className="flex items-center gap-1.5">
+            {/* Photo count — Label role (ALL CAPS overline) + close */}
+            <div className="flex items-center" style={{ gap: 'var(--s1)' }}>
               <button
                 onClick={imageCount > 0 ? onManagePhotos : undefined}
-                className="text-[9px] tracking-widest uppercase font-medium transition-colors flex items-center gap-1"
+                className="type-label transition-colors flex items-center"
                 style={{
-                  color: imageCount > 0 ? (nightMode ? '#888' : '#999') : mutedFg,
+                  gap: 4,
+                  color: imageCount > 0 ? c.t3 : c.t4,
                   cursor: imageCount > 0 ? 'pointer' : 'default',
                 }}
                 disabled={imageCount === 0}
               >
-                {imageCount > 0 ? (
-                  <>
-                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-                      <rect x="1" y="2" width="10" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                      <circle cx="4" cy="5" r="1" stroke="currentColor" strokeWidth="1"/>
-                      <path d="M1 8l2.5-2.5L5 7l2-2 4 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    {imageCount} photo{imageCount !== 1 ? 's' : ''}
-                  </>
-                ) : 'no photos'}
+                {imageCount > 0 ? `${imageCount} photo${imageCount !== 1 ? 's' : ''}` : 'No photos'}
               </button>
               {imageCount > 0 && (
                 <button
                   onClick={onResetPhotos}
                   title="Remove all photos"
-                  style={{ color: mutedFg, lineHeight: 1 }}
+                  style={{ color: c.t4, lineHeight: 1, display: 'flex' }}
                 >
-                  <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-                    <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                  </svg>
+                  <span className="material-symbols-outlined" style={{ fontSize: 12 }}>close</span>
                 </button>
               )}
             </div>

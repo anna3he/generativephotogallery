@@ -87,8 +87,8 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -125,7 +125,6 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-serif: 'Source Serif 4', 'Source Serif 4 Fallback';
   /* computed shadow variables below - do not modify */
   --shadow-2xs: var(--shadow-x) var(--shadow-y) color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
   --shadow-xs: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread) color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
@@ -150,4 +149,81 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ─── Base Design System: Type scale + Spacing tokens ─── */
+/* Source: Design System V2 — Base mode */
+:root {
+  /* Type tokens (size / line-height / letter-spacing locked per level) */
+  --type-h3-size:   17px;
+  --type-h3-lh:     1.35;
+  --type-h3-ls:     -0.01em;
+
+  --type-body-size: 14px;
+  --type-body-lh:   1.6;
+  --type-body-ls:   -0.004em;
+
+  --type-caption-size: 12px;
+  --type-caption-lh:   1.5;
+  --type-caption-ls:   0em;
+
+  /* Label: 11px / 500 / ALL CAPS / +0.07em — used for tags, overlines, dial names, shape names */
+  --type-label-size: 11px;
+  --type-label-lh:   1.05;
+  --type-label-ls:   0.07em;
+
+  /* 4px base spacing tokens */
+  --s1:  4px;
+  --s2:  8px;
+  --s3:  12px;
+  --s4:  16px;
+  --s6:  24px;
+  --s8:  32px;
+  --s10: 40px;
+  --s12: 48px;
+  --s16: 64px;
+}
+
+/* Paired type utilities — always apply size + line-height + tracking together */
+.type-h3 {
+  font-size:      var(--type-h3-size);
+  line-height:    var(--type-h3-lh);
+  letter-spacing: var(--type-h3-ls);
+  font-weight:    400;
+}
+
+.type-body {
+  font-size:      var(--type-body-size);
+  line-height:    var(--type-body-lh);
+  letter-spacing: var(--type-body-ls);
+  font-weight:    400;
+}
+
+.type-caption {
+  font-size:      var(--type-caption-size);
+  line-height:    var(--type-caption-lh);
+  letter-spacing: var(--type-caption-ls);
+  font-weight:    400;
+}
+
+/* Label: ALL CAPS, open tracking — section tags, dial names, shape names, overlines */
+.type-label {
+  font-size:      var(--type-label-size);
+  line-height:    var(--type-label-lh);
+  letter-spacing: var(--type-label-ls);
+  text-transform: uppercase;
+  font-weight:    400;
+}
+
+/* Material Symbols Outlined — size 20 / weight 300 / no fill */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 20;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  font-style: normal;
 }

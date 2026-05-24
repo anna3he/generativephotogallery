@@ -17,14 +17,18 @@ export default function ShapePreviewCanvas({ shape, active, nightMode, onClick, 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    drawShapePreview(canvas, shape, active, nightMode)
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    canvas.width = 44 * dpr
+    canvas.height = 44 * dpr
+    drawShapePreview(canvas, shape, active, nightMode, dpr)
   }, [shape, active, nightMode])
 
   return (
     <button
       onClick={onClick}
       title={label}
-      className="relative flex flex-col items-center gap-1 group"
+      className="relative flex flex-col items-center group"
+      style={{ gap: 'var(--s3)' }}
       aria-pressed={active}
       aria-label={label}
     >
@@ -32,16 +36,18 @@ export default function ShapePreviewCanvas({ shape, active, nightMode, onClick, 
         ref={canvasRef}
         width={44}
         height={44}
-        className="rounded-lg"
         style={{
+          width: 44,
+          height: 44,
+          borderRadius: 8,
           outline: active ? '2px solid rgba(255,255,255,0.4)' : '2px solid transparent',
           outlineOffset: '1px',
           transition: 'outline-color 0.15s',
         }}
       />
       <span
-        className="text-[9px] tracking-widest uppercase font-medium transition-colors"
-        style={{ color: active ? (nightMode ? '#fff' : '#222') : nightMode ? '#666' : '#999' }}
+        className="type-label transition-colors"
+        style={{ color: active ? (nightMode ? '#FAFAFA' : '#0A0A0A') : nightMode ? '#777777' : '#AAAAAA' }}
       >
         {label}
       </span>

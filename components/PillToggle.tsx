@@ -1,5 +1,7 @@
 'use client'
 
+import { getColors } from '@/lib/tokens'
+
 interface Props {
   open: boolean
   onToggle: () => void
@@ -7,17 +9,17 @@ interface Props {
 }
 
 export default function PillToggle({ open, onToggle, nightMode }: Props) {
-  const fg     = nightMode ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.38)'
-  const bg     = nightMode ? 'rgba(40,40,40,0.88)'    : 'rgba(245,244,240,0.92)'
-  const border = nightMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'
-  const keyBg  = nightMode ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'
+  const c     = getColors(nightMode)
+  const bg    = nightMode ? 'rgba(17,17,17,0.92)'    : 'rgba(249,249,249,0.92)'
+  const keyBg = nightMode ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'
 
   return (
     <button
       onClick={onToggle}
       aria-label={open ? 'Close command bar' : 'Open command bar (Space)'}
-      className="fixed bottom-6 z-40 transition-all duration-200"
+      className="fixed z-40 transition-all duration-200"
       style={{
+        bottom: 'var(--s6)',
         left: '50%',
         transform: `translateX(-50%) translateY(${open ? '8px' : '0px'})`,
         opacity: open ? 0 : 1,
@@ -25,29 +27,40 @@ export default function PillToggle({ open, onToggle, nightMode }: Props) {
       }}
     >
       <div
-        className="flex items-center gap-2 px-3 py-2 rounded-full"
+        className="flex items-center rounded-full"
         style={{
+          gap: 'var(--s2)',
+          padding: 'var(--s2) var(--s3)',
           background: bg,
-          border: `1px solid ${border}`,
+          border: `1px solid ${c.line}`,
           boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
           backdropFilter: 'blur(12px)',
           whiteSpace: 'nowrap',
         }}
       >
         <span
-          className="flex items-center justify-center rounded px-2 py-0.5 text-[10px] font-mono leading-none tracking-wide"
+          className="type-label flex items-center justify-center rounded font-mono"
           style={{
+            padding: '2px var(--s2) 3px',
             background: keyBg,
-            color: fg,
-            border: `1px solid ${border}`,
+            color: c.t4,
+            border: `1px solid ${c.line}`,
+            fontWeight: nightMode ? 500 : 400,
+            textTransform: 'none',
             letterSpacing: '0.08em',
-            paddingBottom: '3px',
           }}
         >
           space
         </span>
-        <span className="text-[11px] tracking-wide" style={{ color: fg }}>
-          to open
+        <span
+          className="type-label"
+          style={{
+            color: c.t4,
+            fontWeight: nightMode ? 500 : 400,
+            textTransform: 'none',
+          }}
+        >
+          To open
         </span>
       </div>
     </button>
