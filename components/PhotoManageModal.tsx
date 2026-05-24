@@ -24,8 +24,8 @@ export default function PhotoManageModal({
 
   if (!open) return null
 
-  const c          = getColors(nightMode)
-  const bg         = nightMode ? 'rgba(25,25,25,0.98)' : 'rgba(255,254,250,0.97)'
+  const c  = getColors(nightMode)
+  const bg = nightMode ? 'rgba(17,17,17,0.98)' : 'rgba(249,249,249,0.97)'
 
   const toggleSelect = (index: number) => {
     setSelected(prev => {
@@ -102,13 +102,11 @@ export default function PhotoManageModal({
             style={{
               width: 28,
               height: 28,
-              background: nightMode ? c.bg3 : '#eee',
+              background: nightMode ? c.bg3 : c.bg3,
               color: c.t3,
             }}
           >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
+            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>close</span>
           </button>
         </div>
 
@@ -140,9 +138,7 @@ export default function PhotoManageModal({
                   />
                   {selected.has(i) && (
                     <div className="absolute inset-0 bg-red-500/30 flex items-center justify-center">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M4 4l8 8M12 4l-8 8" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
+                      <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'white' }}>close</span>
                     </div>
                   )}
                 </button>
@@ -169,7 +165,7 @@ export default function PhotoManageModal({
               fontWeight: nightMode ? 500 : 400,
             }}
           >
-            Reset All
+            Reset all
           </button>
 
           <div className="flex items-center" style={{ gap: 'var(--s2)' }}>
@@ -193,7 +189,7 @@ export default function PhotoManageModal({
                 fontWeight: nightMode ? 500 : 400,
               }}
             >
-              Delete Selected
+              Delete selected
             </button>
           </div>
         </div>

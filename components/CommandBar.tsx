@@ -67,10 +67,10 @@ export default function CommandBar({
     [onUpload]
   )
 
-  const c       = getColors(nightMode)
-  const bg      = nightMode ? 'rgba(25,25,25,0.97)'  : 'rgba(255,254,250,0.97)'
-  const btnBg   = nightMode ? c.bg3                   : '#eeecea'
-  const btnFg   = nightMode ? c.t2                    : '#444'
+  const c     = getColors(nightMode)
+  const bg    = nightMode ? 'rgba(17,17,17,0.97)'  : 'rgba(249,249,249,0.97)'
+  const btnBg = nightMode ? c.bg3                  : c.bg3
+  const btnFg = nightMode ? c.t2                   : c.t2
 
   return (
     <>
@@ -141,90 +141,56 @@ export default function CommandBar({
               <button
                 onClick={() => fileRef.current?.click()}
                 title="Upload photos"
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 2v8M5 5l3-3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M3 11v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
+                <span className="material-symbols-outlined">upload</span>
               </button>
 
-              {/* Night mode — clean crescent moon, no cutoff */}
+              {/* Dark / light mode */}
               <button
                 onClick={onNightModeToggle}
                 title={nightMode ? 'Light mode' : 'Night mode'}
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                {nightMode ? (
-                  // Sun icon for light mode
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-                    <circle cx="12" cy="12" r="4"/>
-                    <line x1="12" y1="2"  x2="12" y2="5"/>
-                    <line x1="12" y1="19" x2="12" y2="22"/>
-                    <line x1="2"  y1="12" x2="5"  y2="12"/>
-                    <line x1="19" y1="12" x2="22" y2="12"/>
-                    <line x1="4.22"  y1="4.22"  x2="6.34"  y2="6.34"/>
-                    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-                    <line x1="4.22"  y1="19.78" x2="6.34"  y2="17.66"/>
-                    <line x1="17.66" y1="6.34"  x2="19.78" y2="4.22"/>
-                  </svg>
-                ) : (
-                  // Crescent moon — drawn as a circle minus a smaller offset circle, clean
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8A9.014 9.014 0 0 0 12 3z"/>
-                  </svg>
-                )}
+                <span className="material-symbols-outlined">
+                  {nightMode ? 'light_mode' : 'dark_mode'}
+                </span>
               </button>
 
               {/* Export */}
               <button
                 onClick={onExport}
                 title="Export PNG"
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 10V2M5 7l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M3 11v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
+                <span className="material-symbols-outlined">download</span>
               </button>
             </div>
 
-            {/* Photos label + reset */}
-            <div className="flex items-center" style={{ gap: 6 }}>
+            {/* Photo count — Label role (ALL CAPS overline) + close */}
+            <div className="flex items-center" style={{ gap: 'var(--s1)' }}>
               <button
                 onClick={imageCount > 0 ? onManagePhotos : undefined}
                 className="type-label transition-colors flex items-center"
                 style={{
                   gap: 4,
                   color: imageCount > 0 ? c.t3 : c.t4,
-                  fontWeight: nightMode ? 500 : 400,
                   cursor: imageCount > 0 ? 'pointer' : 'default',
                 }}
                 disabled={imageCount === 0}
               >
-                {imageCount > 0 ? (
-                  <>
-                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-                      <rect x="1" y="2" width="10" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                      <circle cx="4" cy="5" r="1" stroke="currentColor" strokeWidth="1"/>
-                      <path d="M1 8l2.5-2.5L5 7l2-2 4 3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    {imageCount} photo{imageCount !== 1 ? 's' : ''}
-                  </>
-                ) : 'no photos'}
+                {imageCount > 0 ? `${imageCount} photo${imageCount !== 1 ? 's' : ''}` : 'No photos'}
               </button>
               {imageCount > 0 && (
                 <button
                   onClick={onResetPhotos}
                   title="Remove all photos"
-                  style={{ color: c.t4, lineHeight: 1 }}
+                  style={{ color: c.t4, lineHeight: 1, display: 'flex' }}
                 >
-                  <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-                    <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                  </svg>
+                  <span className="material-symbols-outlined" style={{ fontSize: 12 }}>close</span>
                 </button>
               )}
             </div>

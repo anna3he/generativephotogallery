@@ -40,8 +40,8 @@ export default function ShapePreviewCanvas({ shape, active, nightMode, onClick, 
         }}
       />
       <span
-        className="text-[9px] tracking-widest uppercase font-medium transition-colors"
-        style={{ color: active ? (nightMode ? '#fff' : '#222') : nightMode ? '#666' : '#999' }}
+        className="type-label transition-colors"
+        style={{ color: active ? (nightMode ? '#FAFAFA' : '#0A0A0A') : nightMode ? '#777777' : '#AAAAAA' }}
       >
         {label}
       </span>

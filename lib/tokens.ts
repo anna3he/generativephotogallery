@@ -23,12 +23,12 @@ const night: ColorTokens = {
 }
 
 const light: ColorTokens = {
-  bg:    '#F5F4F0',
-  bg2:   '#FFFEFA',
-  bg3:   '#EEECEA',
-  t1:    '#1A1A1A',
-  t2:    '#4A4A4A',
-  t3:    '#888888',
+  bg:    '#F9F9F9',
+  bg2:   '#F2F2F2',
+  bg3:   '#EBEBEB',
+  t1:    '#0A0A0A',
+  t2:    '#444444',
+  t3:    '#767676',
   t4:    '#AAAAAA',
   line:  '#E8E8E8',
   line2: '#DADADA',

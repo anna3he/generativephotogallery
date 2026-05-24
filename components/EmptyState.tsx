@@ -52,7 +52,7 @@ export default function EmptyState({ nightMode, onUpload }: Props) {
             fontWeight: nightMode ? 500 : 400,
           }}
         >
-          drop photos or press space
+          Drop photos or press Space
         </p>
       </div>
     </div>

@@ -10,7 +10,7 @@ interface Props {
 
 export default function PillToggle({ open, onToggle, nightMode }: Props) {
   const c     = getColors(nightMode)
-  const bg    = nightMode ? 'rgba(37,37,37,0.92)'    : 'rgba(245,244,240,0.92)'
+  const bg    = nightMode ? 'rgba(17,17,17,0.92)'    : 'rgba(249,249,249,0.92)'
   const keyBg = nightMode ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'
 
   return (

@@ -152,24 +152,26 @@
   }
 }
 
-/* ─── Design Hierarchy: Type scale + Spacing tokens ─── */
+/* ─── Base Design System: Type scale + Spacing tokens ─── */
+/* Source: Design System V2 — Base mode */
 :root {
-  /* Paired type tokens — size/line-height/tracking locked together */
+  /* Type tokens (size / line-height / letter-spacing locked per level) */
   --type-h3-size:   17px;
-  --type-h3-lh:     1.32;
+  --type-h3-lh:     1.35;
   --type-h3-ls:     -0.01em;
 
   --type-body-size: 14px;
-  --type-body-lh:   1.62;
+  --type-body-lh:   1.6;
   --type-body-ls:   -0.004em;
 
   --type-caption-size: 12px;
   --type-caption-lh:   1.5;
   --type-caption-ls:   0em;
 
+  /* Label: 11px / 500 / ALL CAPS / +0.07em — used for tags, overlines, dial names, shape names */
   --type-label-size: 11px;
   --type-label-lh:   1.05;
-  --type-label-ls:   0.09em;
+  --type-label-ls:   0.07em;
 
   /* 4px base spacing tokens */
   --s1:  4px;
@@ -183,12 +185,12 @@
   --s16: 64px;
 }
 
-/* Utility classes for type roles — apply all three properties together */
+/* Paired type utilities — always apply size + line-height + tracking together */
 .type-h3 {
   font-size:      var(--type-h3-size);
   line-height:    var(--type-h3-lh);
   letter-spacing: var(--type-h3-ls);
-  font-weight:    500;
+  font-weight:    400;
 }
 
 .type-body {
@@ -205,10 +207,24 @@
   font-weight:    400;
 }
 
+/* Label: ALL CAPS, open tracking — section tags, dial names, shape names, overlines */
 .type-label {
   font-size:      var(--type-label-size);
   line-height:    var(--type-label-lh);
   letter-spacing: var(--type-label-ls);
   text-transform: uppercase;
   font-weight:    500;
+}
+
+/* Material Symbols Outlined — size 20 / weight 300 / no fill */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  font-style: normal;
 }

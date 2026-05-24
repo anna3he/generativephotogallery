@@ -275,7 +275,7 @@ export default function DialKit() {
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: nightMode ? '#0a0a0a' : '#f5f4f0' }}
+      style={{ background: nightMode ? '#111111' : '#F9F9F9' }}
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
     >
