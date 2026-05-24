@@ -1,11 +1,15 @@
 'use client'
 
+import { getColors } from '@/lib/tokens'
+
 interface Props {
   nightMode: boolean
   onUpload: (files: FileList) => void
 }
 
 export default function EmptyState({ nightMode, onUpload }: Props) {
+  const c = getColors(nightMode)
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     if (e.dataTransfer.files?.length) onUpload(e.dataTransfer.files)
@@ -19,11 +23,14 @@ export default function EmptyState({ nightMode, onUpload }: Props) {
       onDragOver={handleDragOver}
       style={{ pointerEvents: 'all' }}
     >
-      <div className="flex flex-col items-center gap-3 text-center select-none">
+      <div className="flex flex-col items-center text-center select-none" style={{ gap: 'var(--s3)' }}>
         <div
-          className="w-12 h-12 rounded-2xl flex items-center justify-center mb-1"
+          className="rounded-2xl flex items-center justify-center"
           style={{
-            background: nightMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+            width: 48,
+            height: 48,
+            marginBottom: 'var(--s1)',
+            background: nightMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
           }}
         >
           <svg
@@ -31,7 +38,7 @@ export default function EmptyState({ nightMode, onUpload }: Props) {
             height="22"
             viewBox="0 0 24 24"
             fill="none"
-            style={{ color: nightMode ? '#444' : '#bbb' }}
+            style={{ color: c.t4 }}
           >
             <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
             <circle cx="8.5" cy="10.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
@@ -39,8 +46,11 @@ export default function EmptyState({ nightMode, onUpload }: Props) {
           </svg>
         </div>
         <p
-          className="text-sm font-medium"
-          style={{ color: nightMode ? '#333' : '#bbb' }}
+          className="type-body"
+          style={{
+            color: c.t3,
+            fontWeight: nightMode ? 500 : 400,
+          }}
         >
           drop photos or press space
         </p>

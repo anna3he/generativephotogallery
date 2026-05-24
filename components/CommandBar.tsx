@@ -4,6 +4,7 @@ import { useRef, useCallback } from 'react'
 import ShapePreviewCanvas from './ShapePreviewCanvas'
 import DialKnob from './DialKnob'
 import type { ShapeType } from '@/lib/layouts'
+import { getColors } from '@/lib/tokens'
 
 export interface DialParams {
   count: number
@@ -66,17 +67,17 @@ export default function CommandBar({
     [onUpload]
   )
 
-  const bg      = nightMode ? 'rgba(20,20,20,0.95)'    : 'rgba(255,254,250,0.97)'
-  const border  = nightMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'
-  const btnBg   = nightMode ? '#2a2a2a'                : '#eeecea'
-  const btnFg   = nightMode ? '#ccc'                   : '#444'
-  const mutedFg = nightMode ? '#555'                   : '#bbb'
+  const c       = getColors(nightMode)
+  const bg      = nightMode ? 'rgba(25,25,25,0.97)'  : 'rgba(255,254,250,0.97)'
+  const btnBg   = nightMode ? c.bg3                   : '#eeecea'
+  const btnFg   = nightMode ? c.t2                    : '#444'
 
   return (
     <>
       <div
-        className="fixed bottom-6 left-1/2 z-50"
+        className="fixed left-1/2 z-50"
         style={{
+          bottom: 'var(--s6)',
           transform: `translateX(-50%) translateY(${open ? '0' : '12px'})`,
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'all' : 'none',
@@ -85,10 +86,12 @@ export default function CommandBar({
         }}
       >
         <div
-          className="flex items-end gap-5 px-5 py-4 rounded-2xl"
+          className="flex items-end rounded-2xl"
           style={{
+            gap: 'var(--s6)',
+            padding: 'var(--s4) var(--s6)',
             background: bg,
-            border: `1px solid ${border}`,
+            border: `1px solid ${c.line}`,
             boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
@@ -96,7 +99,7 @@ export default function CommandBar({
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Shapes */}
-          <div className="flex items-end gap-2">
+          <div className="flex items-end" style={{ gap: 'var(--s2)' }}>
             {SHAPES.map((s) => (
               <ShapePreviewCanvas
                 key={s.id}
@@ -109,10 +112,10 @@ export default function CommandBar({
             ))}
           </div>
 
-          <div className="self-stretch w-px mx-1" style={{ background: border }} />
+          <div className="self-stretch w-px" style={{ background: c.line }} />
 
           {/* Dials */}
-          <div className="flex items-end gap-4">
+          <div className="flex items-end" style={{ gap: 'var(--s4)' }}>
             {DIALS.map((d) => (
               <DialKnob
                 key={d.key}
@@ -129,11 +132,11 @@ export default function CommandBar({
             ))}
           </div>
 
-          <div className="self-stretch w-px mx-1" style={{ background: border }} />
+          <div className="self-stretch w-px" style={{ background: c.line }} />
 
           {/* Actions */}
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2">
+          <div className="flex flex-col items-center" style={{ gap: 'var(--s2)' }}>
+            <div className="flex" style={{ gap: 'var(--s2)' }}>
               {/* Upload */}
               <button
                 onClick={() => fileRef.current?.click()}
@@ -190,12 +193,14 @@ export default function CommandBar({
             </div>
 
             {/* Photos label + reset */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center" style={{ gap: 6 }}>
               <button
                 onClick={imageCount > 0 ? onManagePhotos : undefined}
-                className="text-[9px] tracking-widest uppercase font-medium transition-colors flex items-center gap-1"
+                className="type-label transition-colors flex items-center"
                 style={{
-                  color: imageCount > 0 ? (nightMode ? '#888' : '#999') : mutedFg,
+                  gap: 4,
+                  color: imageCount > 0 ? c.t3 : c.t4,
+                  fontWeight: nightMode ? 500 : 400,
                   cursor: imageCount > 0 ? 'pointer' : 'default',
                 }}
                 disabled={imageCount === 0}
@@ -215,7 +220,7 @@ export default function CommandBar({
                 <button
                   onClick={onResetPhotos}
                   title="Remove all photos"
-                  style={{ color: mutedFg, lineHeight: 1 }}
+                  style={{ color: c.t4, lineHeight: 1 }}
                 >
                   <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
                     <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>

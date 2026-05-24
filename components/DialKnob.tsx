@@ -102,7 +102,8 @@ export default function DialKnob({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onFocus={onFocus}
-      className="flex flex-col items-center gap-2 cursor-ns-resize outline-none select-none"
+      className="flex flex-col items-center cursor-ns-resize outline-none select-none"
+      style={{ gap: 'var(--s2)' }}
       role="slider"
       aria-valuenow={value}
       aria-valuemin={min}
@@ -113,7 +114,7 @@ export default function DialKnob({
       <div
         className="relative w-10 h-10 rounded-full flex items-center justify-center"
         style={{
-          background: nightMode ? '#1e1e1e' : '#e8e7e3',
+          background: nightMode ? '#252525' : '#e8e7e3',
           boxShadow: focused
             ? `0 0 0 2px ${nightMode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.25)'}`
             : 'none',
@@ -127,7 +128,7 @@ export default function DialKnob({
             cy="20"
             r="14"
             fill="none"
-            stroke={nightMode ? '#333' : '#ccc'}
+            stroke={nightMode ? '#383838' : '#ccc'}
             strokeWidth="2.5"
             strokeDasharray={`${(300 / 360) * Math.PI * 2 * 14} ${Math.PI * 2 * 14}`}
             strokeLinecap="round"
@@ -145,15 +146,23 @@ export default function DialKnob({
           />
         </svg>
         <span
-          className="text-[11px] font-medium tabular-nums z-10"
-          style={{ color: nightMode ? '#ccc' : '#333' }}
+          className="tabular-nums z-10"
+          style={{
+            fontSize: 'var(--type-label-size)',
+            lineHeight: 'var(--type-label-lh)',
+            letterSpacing: '-0.01em',
+            fontWeight: nightMode ? 500 : 400,
+            color: nightMode ? '#CCCCCC' : '#333',
+          }}
         >
           {Number.isInteger(step) ? Math.round(value) : value.toFixed(1)}
         </span>
       </div>
       <span
-        className="text-[9px] tracking-widest uppercase font-medium"
-        style={{ color: nightMode ? '#666' : '#888' }}
+        className="type-label"
+        style={{
+          color: nightMode ? '#777777' : '#888888',
+        }}
       >
         {label}
       </span>
