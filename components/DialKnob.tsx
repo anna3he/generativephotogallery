@@ -114,7 +114,7 @@ export default function DialKnob({
       <div
         className="relative w-10 h-10 rounded-full flex items-center justify-center"
         style={{
-          background: nightMode ? '#252525' : '#e8e7e3',
+          background: nightMode ? '#252525' : '#EBEBEB',
           boxShadow: focused
             ? `0 0 0 2px ${nightMode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.25)'}`
             : 'none',
@@ -128,7 +128,7 @@ export default function DialKnob({
             cy="20"
             r="14"
             fill="none"
-            stroke={nightMode ? '#383838' : '#ccc'}
+            stroke={nightMode ? '#383838' : '#D4D4D4'}
             strokeWidth="2.5"
             strokeDasharray={`${(300 / 360) * Math.PI * 2 * 14} ${Math.PI * 2 * 14}`}
             strokeLinecap="round"
