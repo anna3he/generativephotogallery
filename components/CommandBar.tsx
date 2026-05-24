@@ -144,7 +144,7 @@ export default function CommandBar({
                 className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                <span className="material-symbols-outlined">upload</span>
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 20" }}>upload</span>
               </button>
 
               {/* Dark / light mode */}
@@ -154,7 +154,7 @@ export default function CommandBar({
                 className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                <span className="material-symbols-outlined">
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 20" }}>
                   {nightMode ? 'light_mode' : 'dark_mode'}
                 </span>
               </button>
@@ -166,7 +166,7 @@ export default function CommandBar({
                 className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
                 style={{ background: btnBg, color: btnFg }}
               >
-                <span className="material-symbols-outlined">download</span>
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 20" }}>download</span>
               </button>
             </div>
 
