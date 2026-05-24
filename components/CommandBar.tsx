@@ -86,7 +86,7 @@ export default function CommandBar({
         }}
       >
         <div
-          className="flex items-end rounded-2xl"
+          className="flex items-center rounded-2xl"
           style={{
             gap: 'var(--s8)',
             padding: 'var(--s4) var(--s8)',
@@ -99,7 +99,7 @@ export default function CommandBar({
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Shapes */}
-          <div className="flex items-end" style={{ gap: 'var(--s3)' }}>
+          <div className="flex items-center" style={{ gap: 'var(--s3)' }}>
             {SHAPES.map((s) => (
               <ShapePreviewCanvas
                 key={s.id}

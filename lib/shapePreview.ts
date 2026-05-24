@@ -1,167 +1,173 @@
-// Mini dot diagram renderers for the command bar shape selector
-const GOLDEN_ANGLE = 2.39996
-
 export type PreviewShape = 'spiral' | 'orbit' | 'globe' | 'cube'
 
-function dot(
+function d(
   ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  r: number,
-  alpha: number,
-  nightMode: boolean
+  x: number, y: number,
+  r: number, alpha: number,
+  color: string
 ) {
   ctx.beginPath()
   ctx.arc(x, y, r, 0, Math.PI * 2)
+  ctx.fillStyle = color
   ctx.globalAlpha = alpha
-  ctx.fillStyle = nightMode ? '#e0e0e0' : '#1a1a1a'
   ctx.fill()
-  ctx.globalAlpha = 1
 }
 
 export function drawShapePreview(
   canvas: HTMLCanvasElement,
   shape: PreviewShape,
   active: boolean,
-  nightMode: boolean
+  nightMode: boolean,
+  dpr = 1
 ) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  const W = canvas.width
-  const H = canvas.height
-  const cx = W / 2
-  const cy = H / 2
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-  ctx.clearRect(0, 0, W, H)
+  const S = 44
+  const cx = S / 2
+  const cy = S / 2
 
-  // Background
+  ctx.clearRect(0, 0, S, S)
+
   ctx.fillStyle = active
-    ? nightMode ? '#2a2a2a' : '#1a1a1a'
-    : nightMode ? '#1a1a1a' : '#f0efeb'
+    ? (nightMode ? '#2a2a2a' : '#1a1a1a')
+    : (nightMode ? '#202020' : '#EBEBEB')
   ctx.beginPath()
-  ctx.roundRect(0, 0, W, H, 8)
+  ctx.roundRect(0, 0, S, S, 8)
   ctx.fill()
 
-  const dotColor = active
-    ? nightMode ? '#ffffff' : '#ffffff'
-    : nightMode ? '#cccccc' : '#3a3a3a'
-
-  const N = 18
+  const fc = active ? '#ffffff' : (nightMode ? '#cccccc' : '#3a3a3a')
+  const pa = active ? 0.80 : 0.65
+  const sa = active ? 0.42 : 0.35
 
   switch (shape) {
     case 'spiral': {
-      for (let i = 0; i < N; i++) {
-        const angle = i * GOLDEN_ANGLE
-        const r = 6 * Math.sqrt(i)
-        const x = cx + Math.cos(angle) * r
-        const y = cy + Math.sin(angle) * r
-        const radius = 1.2 + (N - i) * 0.05
-        ctx.beginPath()
-        ctx.arc(x, y, radius, 0, Math.PI * 2)
-        ctx.fillStyle = dotColor
-        ctx.globalAlpha = 0.5 + 0.5 * (i / N)
-        ctx.fill()
-      }
-      break
-    }
-    case 'orbit': {
-      // Center
-      dot(ctx, cx, cy, 1.8, 0.9, active ? false : nightMode)
-      ctx.fillStyle = dotColor
-      ctx.fill()
-
+      // Concentric tilted ellipses — rings seen at an angle (like a galaxy)
+      const tilt = -Math.PI / 6
       const rings = [
-        { r: 7, n: 5 },
-        { r: 14, n: 9 },
+        { rx: 5,    ry: 2.2,  n: 12 },
+        { rx: 9.5,  ry: 4.2,  n: 20 },
+        { rx: 14.5, ry: 6.5,  n: 30 },
+        { rx: 19.5, ry: 8.8,  n: 40 },
       ]
-      rings.forEach(({ r, n }) => {
+      rings.forEach(({ rx, ry, n }) => {
         for (let i = 0; i < n; i++) {
           const angle = (i / n) * Math.PI * 2
-          const x = cx + Math.cos(angle) * r
-          const y = cy + Math.sin(angle) * r
-          ctx.beginPath()
-          ctx.arc(x, y, 1.2, 0, Math.PI * 2)
-          ctx.fillStyle = dotColor
-          ctx.globalAlpha = 0.8
-          ctx.fill()
+          const ex = rx * Math.cos(angle)
+          const ey = ry * Math.sin(angle)
+          const px = cx + ex * Math.cos(tilt) - ey * Math.sin(tilt)
+          const py = cy + ex * Math.sin(tilt) + ey * Math.cos(tilt)
+          d(ctx, px, py, 0.8, pa, fc)
         }
       })
       break
     }
-    case 'globe': {
-      // Draw a 3D sphere wireframe with dots
-      const radius = 14
-      const goldenRatio = (1 + Math.sqrt(5)) / 2
-      const count = 20
 
-      // Draw an ellipse outline for the globe
-      ctx.beginPath()
-      ctx.ellipse(cx, cy, radius, radius, 0, 0, Math.PI * 2)
-      ctx.strokeStyle = dotColor
-      ctx.globalAlpha = 0.2
-      ctx.lineWidth = 0.5
-      ctx.stroke()
+    case 'orbit': {
+      // Center planet
+      d(ctx, cx, cy, 3.8, pa + 0.1, fc)
 
-      // Fibonacci sphere points
-      for (let i = 0; i < count; i++) {
-        const theta = (2 * Math.PI * i) / goldenRatio
-        const phi = Math.acos(1 - (2 * (i + 0.5)) / count)
-
-        // 3D to 2D projection (slight tilt)
-        const x3d = Math.sin(phi) * Math.cos(theta)
-        const y3d = Math.cos(phi)
-        const z3d = Math.sin(phi) * Math.sin(theta)
-
-        // Simple orthographic projection with slight rotation
-        const x = cx + x3d * radius
-        const y = cy + y3d * radius * 0.85  // Slight vertical compression
-
-        // Depth-based size and alpha
-        const depth = z3d
-        const dotRadius = 0.8 + (depth + 1) * 0.5
-        const alpha = 0.3 + (depth + 1) * 0.35
-
-        ctx.beginPath()
-        ctx.arc(x, y, dotRadius, 0, Math.PI * 2)
-        ctx.fillStyle = dotColor
-        ctx.globalAlpha = alpha
-        ctx.fill()
+      // Ring 1 — small dots + 3 satellite planets
+      const r1 = 11
+      for (let i = 0; i < 22; i++) {
+        const angle = (i / 22) * Math.PI * 2
+        d(ctx, cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1, 0.7, sa, fc)
       }
+      ;[0, (2 * Math.PI) / 3, (4 * Math.PI) / 3].forEach(angle => {
+        d(ctx, cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1, 2.3, pa, fc)
+      })
+
+      // Ring 2 — small dots + 2 satellite planets
+      const r2 = 18
+      for (let i = 0; i < 36; i++) {
+        const angle = (i / 36) * Math.PI * 2
+        d(ctx, cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2, 0.7, sa, fc)
+      }
+      ;[Math.PI / 5, Math.PI + Math.PI / 5].forEach(angle => {
+        d(ctx, cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2, 2.3, pa, fc)
+      })
       break
     }
-    case 'cube': {
-      // Isometric cube — 3 filled faces
-      const s = 10
-      const cos30 = Math.cos(Math.PI / 6)
-      const sin30 = Math.sin(Math.PI / 6)
 
-      // 7 visible isometric vertices
-      const top    = { x: cx,              y: cy - s }
-      const tRight = { x: cx + s * cos30,  y: cy - s * sin30 }
-      const tLeft  = { x: cx - s * cos30,  y: cy - s * sin30 }
-      const mid    = { x: cx,              y: cy }
-      const bRight = { x: cx + s * cos30,  y: cy + s * sin30 }
-      const bLeft  = { x: cx - s * cos30,  y: cy + s * sin30 }
-      const bot    = { x: cx,              y: cy + s }
+    case 'globe': {
+      const R = 17
 
-      const fill = (pts: { x: number; y: number }[], alpha: number) => {
-        ctx.beginPath()
-        ctx.moveTo(pts[0].x, pts[0].y)
-        pts.slice(1).forEach(p => ctx.lineTo(p.x, p.y))
-        ctx.closePath()
-        ctx.fillStyle = dotColor
-        ctx.globalAlpha = alpha
-        ctx.fill()
+      // Outer circle
+      for (let i = 0; i < 44; i++) {
+        const angle = (i / 44) * Math.PI * 2
+        d(ctx, cx + Math.cos(angle) * R, cy + Math.sin(angle) * R * 0.97, 0.8, pa, fc)
       }
 
-      const topAlpha   = active ? 0.95 : 0.80
-      const leftAlpha  = active ? 0.60 : 0.48
-      const rightAlpha = active ? 0.35 : 0.28
+      // Latitude lines (3 horizontal ellipses)
+      ;[-R * 0.52, 0, R * 0.52].forEach(yOff => {
+        const latR = Math.sqrt(Math.max(0, R * R - yOff * yOff))
+        const n = Math.max(8, Math.round(latR * 2.4))
+        for (let i = 0; i < n; i++) {
+          const angle = (i / n) * Math.PI * 2
+          d(
+            ctx,
+            cx + Math.cos(angle) * latR,
+            cy + yOff + Math.sin(angle) * latR * 0.28,
+            0.75, sa + 0.06, fc
+          )
+        }
+      })
 
-      fill([top, tRight, mid, tLeft], topAlpha)
-      fill([tLeft, mid, bot, bLeft], leftAlpha)
-      fill([tRight, bRight, bot, mid], rightAlpha)
+      // Longitude lines (3 vertical ellipses at different rotations)
+      ;[-Math.PI / 3.5, 0, Math.PI / 3.5].forEach(lonAngle => {
+        for (let i = 0; i < 28; i++) {
+          const t = (i / 28) * Math.PI * 2
+          const x3 = Math.cos(t) * Math.cos(lonAngle)
+          const z3 = Math.cos(t) * Math.sin(lonAngle)
+          if (lonAngle !== 0 && z3 < -0.15) continue
+          d(ctx, cx + x3 * R, cy + Math.sin(t) * R * 0.97, 0.75, sa + 0.06, fc)
+        }
+      })
+      break
+    }
+
+    case 'cube': {
+      // 3D wireframe cube — dots along edges, larger dots at vertices
+      const hs = 11
+      const rotY = 0.55
+      const rotX = 0.38
+
+      const project = ([vx, vy, vz]: number[]) => {
+        const x1 = vx * Math.cos(rotY) - vz * Math.sin(rotY)
+        const z1 = vx * Math.sin(rotY) + vz * Math.cos(rotY)
+        const y2 = vy * Math.cos(rotX) - z1 * Math.sin(rotX)
+        const z2 = vy * Math.sin(rotX) + z1 * Math.cos(rotX)
+        return { x: cx + x1 * hs, y: cy + y2 * hs, z: z2 }
+      }
+
+      const verts = [
+        [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
+        [-1,-1, 1], [1,-1, 1], [1,1, 1], [-1,1, 1],
+      ].map(project)
+
+      const edges: [number, number][] = [
+        [0,1],[1,2],[2,3],[3,0],
+        [4,5],[5,6],[6,7],[7,4],
+        [0,4],[1,5],[2,6],[3,7],
+      ]
+
+      edges.forEach(([ai, bi]) => {
+        const va = verts[ai], vb = verts[bi]
+        const front = (va.z + vb.z) > 0
+        const edgeAlpha = front ? sa + 0.14 : Math.max(0.08, sa - 0.1)
+        const dx = vb.x - va.x, dy = vb.y - va.y
+        const n = Math.max(2, Math.round(Math.sqrt(dx * dx + dy * dy) / 2.6))
+        for (let i = 1; i < n; i++) {
+          const t = i / n
+          d(ctx, va.x + dx * t, va.y + dy * t, 0.65, edgeAlpha, fc)
+        }
+      })
+
+      verts.forEach(p => {
+        d(ctx, p.x, p.y, p.z > 0 ? 2.1 : 1.5, p.z > 0 ? pa : sa, fc)
+      })
       break
     }
   }
