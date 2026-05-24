@@ -161,7 +161,7 @@ export default function DialKnob({
       <span
         className="type-label"
         style={{
-          color: nightMode ? '#777777' : '#888888',
+          color: nightMode ? '#777777' : '#AAAAAA',
         }}
       >
         {label}

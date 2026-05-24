@@ -72,7 +72,7 @@ export default function PhotoManageModal({
         style={{
           background: bg,
           border: `1px solid ${c.line}`,
-          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          boxShadow: nightMode ? 'none' : '0 16px 48px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06)',
         }}
         onClick={e => e.stopPropagation()}
       >
@@ -106,7 +106,7 @@ export default function PhotoManageModal({
               color: c.t3,
             }}
           >
-            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>close</span>
+            <span className="material-symbols-outlined" style={{ fontSize: 12 }}>close</span>
           </button>
         </div>
 
@@ -165,7 +165,7 @@ export default function PhotoManageModal({
               fontWeight: nightMode ? 500 : 400,
             }}
           >
-            Reset all
+            Reset All
           </button>
 
           <div className="flex items-center" style={{ gap: 'var(--s2)' }}>
@@ -189,7 +189,7 @@ export default function PhotoManageModal({
                 fontWeight: nightMode ? 500 : 400,
               }}
             >
-              Delete selected
+              Delete Selected
             </button>
           </div>
         </div>

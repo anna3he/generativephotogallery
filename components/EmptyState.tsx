@@ -25,11 +25,12 @@ export default function EmptyState({ nightMode, onUpload }: Props) {
     >
       <div className="flex flex-col items-center text-center select-none" style={{ gap: 'var(--s3)' }}>
         <div
-          className="rounded-2xl flex items-center justify-center"
+          className="flex items-center justify-center"
           style={{
             width: 48,
             height: 48,
             marginBottom: 'var(--s1)',
+            borderRadius: 10,
             background: nightMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
           }}
         >

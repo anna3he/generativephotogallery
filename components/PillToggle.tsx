@@ -60,7 +60,7 @@ export default function PillToggle({ open, onToggle, nightMode }: Props) {
             textTransform: 'none',
           }}
         >
-          to open
+          To open
         </span>
       </div>
     </button>

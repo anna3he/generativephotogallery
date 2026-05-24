@@ -68,7 +68,7 @@ export default function CommandBar({
   )
 
   const c     = getColors(nightMode)
-  const bg    = nightMode ? 'rgba(17,17,17,0.97)'  : 'rgba(249,249,249,0.97)'
+  const bg    = nightMode ? 'rgba(37,37,37,0.97)'   : 'rgba(249,249,249,0.97)'
   const btnBg = nightMode ? c.bg3                  : c.bg3
   const btnFg = nightMode ? c.t2                   : c.t2
 
@@ -92,7 +92,7 @@ export default function CommandBar({
             padding: 'var(--s4) var(--s6)',
             background: bg,
             border: `1px solid ${c.line}`,
-            boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08)',
+            boxShadow: nightMode ? 'none' : '0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
           }}
