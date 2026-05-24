@@ -24,15 +24,11 @@ function buildSeededLayout(shape: ShapeType, params: DialParams, seed: number): 
   return tiles
 }
 
-// Good-looking defaults per shape
 const SHAPE_DEFAULTS: Record<ShapeType, Partial<DialParams>> = {
-  spiral:  { count: 12, spread: 1.0, size: 1.0 },
-  // orbit: high count fills the rings, size=1 but layout multiplies by 0.45 so tiles are small
-  orbit:   { count: 24, spread: 1.0, size: 1.0 },
-  // globe: fill the sphere surface, layout multiplies size by 0.5
-  globe:   { count: 50, spread: 1.0, size: 1.0 },
-  // cube: 2x2x2 grid by default
-  cube:    { count: 8,  spread: 1.0, size: 1.0 },
+  spiral: { count: 12,  spread: 1.0,  size: 1.0 },
+  orbit:  { count: 24,  spread: 3.5,  size: 0.6 },
+  globe:  { count: 50,  spread: 0.55, size: 0.7 },
+  cube:   { count: 15,  spread: 1.0,  size: 1.5 },
 }
 
 export default function DialKit() {
