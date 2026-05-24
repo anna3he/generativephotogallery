@@ -1,11 +1,19 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-import { Geist, Geist_Mono, Source_Serif_4 } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 
-const _geist = Geist({ subsets: ['latin'], weight: ["100","200","300","400","500","600","700","800","900"] })
-const _geistMono = Geist_Mono({ subsets: ['latin'], weight: ["100","200","300","400","500","600","700","800","900"] })
-const _sourceSerif4 = Source_Serif_4({ subsets: ['latin'], weight: ["200","300","400","500","600","700","800","900"] })
+const geist = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist',
+  weight: ['300', '400', '500'],
+})
+
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  weight: ['300', '400', '500'],
+})
 
 export const metadata: Metadata = {
   title: 'Generative Photo Layouts',
@@ -25,7 +33,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="bg-[#f9f9f9]">
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} bg-[#f9f9f9]`}>
       <head>
         <link
           rel="stylesheet"
